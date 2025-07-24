@@ -1,64 +1,55 @@
 <?php
-// Your temporary test lines (which should now be commented out or removed)
-// echo "This PHP file is being reached!";
-// exit(); // Stop execution immediately after this message
-
-
-// PHP script to process contact form submissions and send an email using PHPMailer.
-
-// --- 1. Error Reporting (for Development/Debugging) ---
-// Turn ON error display for development to see issues.
-// For production, set display_errors to 0 and error_reporting to 0 or E_ALL & ~E_NOTICE.
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// --- 2. PHPMailer Autoload/Require Files ---
-// Adjust these paths based on where you placed the PHPMailer 'src' folder
-// relative to this 'process_contact.php' file.
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// A common setup after downloading the zip and putting it in 'vendor':
 require __DIR__ . '/vendor/PHPMailer-master/src/Exception.php';
 require __DIR__ . '/vendor/PHPMailer-master/src/PHPMailer.php';
 require __DIR__ . '/vendor/PHPMailer-master/src/SMTP.php';
 
+// Set the content type header for JSON response
+header('Content-Type: application/json');
 
-// --- 3. Check if the form was submitted via POST method ---
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    // --- 4. Sanitize and Validate Form Inputs ---
     $name = htmlspecialchars(trim($_POST['name']));
     $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
     $message = htmlspecialchars(trim($_POST['message']));
 
     // Basic server-side validation.
     if (empty($name) || empty($email) || empty($message)) {
-        header("Location: /contact.html?status=empty_fields");
+        echo json_encode(['success' => false, 'message' => 'Please fill in all fields.']);
         exit();
     }
-
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        header("Location: /contact.html?status=invalid_email");
+        echo json_encode(['success' => false, 'message' => 'Invalid email format.']);
         exit();
     }
 
-    // --- 5. Initialize PHPMailer ---
     $mail = new PHPMailer(true);
 
     try {
-        // For local MAMP testing with Mailhog (UNCOMMENT AND USE THESE INSTEAD ON LOCAL)
+        // Mailhog settings for local testing (UNCOMMENT FOR LOCAL)
         $mail->isSMTP();
         $mail->Host       = 'localhost';
         $mail->SMTPAuth   = false;
-        $mail->Port       = 1025; // Default Mailhog SMTP port
-        
-        // --- 7. Recipients ---
+        $mail->Port       = 1025;
+
+        // Hostinger settings (COMMENT OUT FOR LOCAL, UNCOMMENT FOR LIVE)
+        /*
+        $mail->Host       = 'smtp.hostinger.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'your_email@yourdomain.com';
+        $mail->Password   = 'your_email_password';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = 587;
+        */
+
         $mail->setFrom($email, $name);
         $mail->addAddress('your_recipient_email@example.com', 'Your Name'); // *** REPLACE this ***
         $mail->addReplyTo($email, $name);
 
-        // --- 8. Email Content ---
         $mail->isHTML(false);
         $mail->Subject = 'New Contact Form Submission from ' . $name;
         $mail->Body    = "You have received a new message from your website contact form.\n\n"
@@ -66,23 +57,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        . "Email: " . $email . "\n"
                        . "Message:\n" . $message;
 
-        // --- 9. Send the Email ---
         $mail->send();
 
-        // --- 10. Success Handling ---
-        header("Location: /thank_you.html"); // *** REPLACE this ***
+        // Send success JSON response
+        echo json_encode(['success' => true, 'message' => 'Your message has been sent successfully.']);
         exit();
 
     } catch (Exception $e) {
-        // --- 11. Error Handling ---
+        // Send error JSON response
         error_log("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
-        header("Location: /error.html?status=send_failed"); // *** REPLACE this ***
+        echo json_encode(['success' => false, 'message' => 'Oops! Something went wrong and we could not send your message. Please try again later.']);
         exit();
     }
 
 } else {
-    // --- 12. Handle non-POST requests ---
-    header("Location: /contact.html"); // *** REPLACE this ***
+    // If not a POST request, respond with an error or redirect to the form
+    echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
     exit();
 }
 ?>

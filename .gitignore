@@ -1,5 +1,15 @@
-.DS_Store
+# macOS system files
+DS_Store
+
+# HTML5UP files
 LICENSE.txt
 README.txt
 generic.html
 elements.html
+
+# PHP Composer dependencies
+/vendor/
+
+# Potentially sensitive files
+
+get_oauth_token.php

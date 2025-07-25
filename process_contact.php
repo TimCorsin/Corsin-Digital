@@ -5,9 +5,7 @@ error_reporting(E_ALL);
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require __DIR__ . '/vendor/PHPMailer-master/src/Exception.php';
-require __DIR__ . '/vendor/PHPMailer-master/src/PHPMailer.php';
-require __DIR__ . '/vendor/PHPMailer-master/src/SMTP.php';
+require __DIR__ . '/vendor/autoload.php';
 
 // Set the content type header for JSON response
 header('Content-Type: application/json');

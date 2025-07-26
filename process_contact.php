@@ -1,11 +1,9 @@
 <?php
-ini_set('display_errors', 1);
+ini_set('display_errors', 1); // Keep for local debugging, but set to 0 for live production
 error_reporting(E_ALL);
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require __DIR__ . '/vendor/autoload.php';
+// No 'use' statements for PHPMailer needed anymore
+// No 'require' for Composer autoload or individual PHPMailer files needed anymore
 
 // Set the content type header for JSON response
 header('Content-Type: application/json');
@@ -25,48 +23,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    $mail = new PHPMailer(true);
+    // --- Start: PHP's native mail() function ---
 
-    try {
-        // Mailhog settings for local testing (UNCOMMENT FOR LOCAL)
-        $mail->isSMTP();
-        $mail->Host       = 'localhost';
-        $mail->SMTPAuth   = false;
-        $mail->Port       = 1025;
+    // Define the recipient email address
+    $to = 'tim@corsinhaus.com'; // <--- THIS IS YOUR RECIPIENT EMAIL
 
-        // Hostinger settings (COMMENT OUT FOR LOCAL, UNCOMMENT FOR LIVE)
-        /*
-        $mail->Host       = 'smtp.hostinger.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = 'your_email@yourdomain.com';
-        $mail->Password   = 'your_email_password';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = 587;
-        */
+    // Define the subject line
+    $subject = 'New Contact Form Submission from ' . $name;
 
-        $mail->setFrom($email, $name);
-        $mail->addAddress('your_recipient_email@example.com', 'Your Name'); // *** REPLACE this ***
-        $mail->addReplyTo($email, $name);
+    // Build the email message body
+    $email_body = "You have received a new message from your website contact form.\n\n"
+                  . "Name: " . $name . "\n"
+                  . "Email: " . $email . "\n"
+                  . "Message:\n" . $message;
 
-        $mail->isHTML(false);
-        $mail->Subject = 'New Contact Form Submission from ' . $name;
-        $mail->Body    = "You have received a new message from your website contact form.\n\n"
-                       . "Name: " . $name . "\n"
-                       . "Email: " . $email . "\n"
-                       . "Message:\n" . $message;
+    // Headers for the email
+    // IMPORTANT: For best deliverability, the 'From' address should ideally be an email on the sending domain (your Hostinger domain, e.g., corsindigital.com).
+    // The 'Reply-To' header will ensure you can reply directly to the user who filled out the form.
+    $headers = 'From: no-reply@corsindigital.com' . "\r\n" . // <--- Use an email on your Hostinger domain (can be a non-existent one if no email service is set up for it, but better if it exists)
+               'Reply-To: ' . $email . "\r\n" .
+               'X-Mailer: PHP/' . phpversion();
 
-        $mail->send();
-
+    // Send the email
+    if (mail($to, $subject, $email_body, $headers)) {
         // Send success JSON response
         echo json_encode(['success' => true, 'message' => 'Your message has been sent successfully.']);
         exit();
-
-    } catch (Exception $e) {
+    } else {
+        // Log the error (optional, can be checked in Hostinger's error logs)
+        error_log("Mail failed to send to $to from $email.");
         // Send error JSON response
-        error_log("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
         echo json_encode(['success' => false, 'message' => 'Oops! Something went wrong and we could not send your message. Please try again later.']);
         exit();
     }
+    // --- End: PHP's native mail() function ---
 
 } else {
     // If not a POST request, respond with an error or redirect to the form

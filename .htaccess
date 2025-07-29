@@ -1,0 +1,15 @@
+# Ensure RewriteEngine is on for URL rewriting
+RewriteEngine On
+
+# 1. Force HTTPS and redirect www to non-www (adjust if you prefer www)
+# If traffic is HTTP OR if hostname starts with www.
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+# Redirect to HTTPS and non-www version of the URL
+RewriteRule ^(.*)$ https://corsindigital.com/$1 [L,R=301]
+
+# 2. Remove /index.html from the URL
+# Only if the original request included /index.html
+RewriteCond %{THE_REQUEST} /index\.html [NC]
+# Redirect /path/to/index.html to /path/to/ (removing index.html)
+RewriteRule ^(.*?)index\.html$ /$1 [L,R=301,NC]

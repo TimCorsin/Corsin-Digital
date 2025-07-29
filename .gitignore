@@ -2,7 +2,7 @@
 .DS_Store
 
 # Development files
-_dev_files/
+/_dev_files/
 
 # PHP Composer dependencies
 /vendor/

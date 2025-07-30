@@ -1,26 +1,30 @@
 <!DOCTYPE HTML>
-<html>
-	<head>
-		<title>Front-End Web Development | Corsin Digital</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-		<meta name="description" content="Connecticut based, front-end web developer building responsive and performant websites for other small businesses.">
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css?family=Merriweather:300,700,300italic,700italic|Source+Sans+Pro:900&display=swap" rel="stylesheet">
-		<link rel="stylesheet" href="/assets/css/fontawesome-all.min.css">
-		<link rel="preload" href="/assets/css/main.css" as="style">
-		<link rel="stylesheet" href="/assets/css/main.css">
-		<noscript><link rel="stylesheet" href="/assets/css/noscript.css"></noscript>
-		<!-- Google tag (gtag.js) -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZ5L4GKR0G"></script>
-		<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-		gtag('config', 'G-ZZ5L4GKR0G');
-		</script>
-	</head>
+<html lang="en">
+<head>
+	<title>Front-End Web Development | Corsin Digital</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Connecticut based, front-end web developer building responsive and performant websites for other small businesses.">
+	<!----------------- FONTS ----------------->
+	<link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon"> 
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css?family=Merriweather:300,700,300italic,700italic|Source+Sans+Pro:900&display=swap" rel="stylesheet">
+
+	<!----------------- CUTSOM STYLES -----------------> 
+	<link rel="preload" href="/assets/css/main.css" as="style">
+	<link rel="stylesheet" href="/assets/css/main.css">
+	<link rel="stylesheet" href="/assets/css/fontawesome-all.min.css"> <noscript><link rel="stylesheet" href="/assets/css/noscript.css"></noscript>
+
+	<!----------------- GOOGLE TAGS ----------------->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZ5L4GKR0G"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-ZZ5L4GKR0G');
+	</script>
+</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
 			<div id="wrapper" class="fade-in">
@@ -39,13 +43,13 @@
 					</header>
 
 				<!-- Nav -->
-					<nav id="nav">
+					<nav id="nav" aria-label="Main Navigation">
 						<ul class="links">
 							<li class="active"><a href="/">This is Corsin Digital</a></li>
 							<li><a href="/SummersBee/">This is SummersBee</a></li>
 							<li><a href="/DSA/">This is DSA</a></li>
 						</ul>
-						<ul class="icons">
+						<ul class="icons" aria-label="Social links">
 							<li><a href="https://www.linkedin.com/company/corsin-haus/" target="_blank" rel="noopener noreferrer" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
 							<li><a href="https://github.com/TimCorsin" target="_blank" rel="noopener noreferrer" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
 						</ul>
@@ -96,7 +100,7 @@
 					<footer id="footer">
 						<section>
 							<h2>We'd love to hear what we can do for you!</h2>
-							<form id="contactForm" method="post" action="/process_contact.php">								
+							<form id="contactForm" method="post" action="/process_contact.php" aria-label="Contact form">
 								<div class="fields">
 									<div class="field">
 										<label for="name">Name</label>
@@ -116,7 +120,7 @@
 								</ul>
 							</form>
 						</section>
-						<div id="successModal" class="modal">
+						<div id="successModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalMessageHeading" aria-describedby="modalMessageText">
 							<div class="modal-content">
 								<span class="close-button">&times;</span>
 								<h3 id="modalMessageHeading">Success!</h3>
